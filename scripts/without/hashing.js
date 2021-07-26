@@ -5,11 +5,11 @@ import { textSummary } from 'https://jslib.k6.io/k6-summary/0.0.1/index.js';
 
 let query = `
     query FindFirstIssue {
-    allSymptoms(limit:5000){id, date}
+    allSymptoms(limit:5000){symptom}
 }`;
 
 let headers = {
-    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJyb2xlIjoiQWR2ZXJ0aXNlciJ9.Ey1wKGi0d9j_5xK8KLmV46RVxhZen2Li6HVbNPqlN1c`, //Advertiser
+    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJyb2xlIjoiQWR2ZXJ0aXNlciJ9.PfL7eg5CCcPIz31Fuo8SLIR_BQADcQ99cft2vlVumbY`, //Advertiser
     'Content-Type': 'application/json',
 };
 
@@ -21,11 +21,14 @@ export let options = {
 };
 
 export default function () {
-    let res = http.post('http://localhost:4000', JSON.stringify({query: query}),{headers: headers});
+    let res = http.post('https://peng-without-directives.azurewebsites.net', JSON.stringify({query: query}),{headers: headers});
     if(res.status != 200) {
         console.error("Could not send summary, got status " + res.status);
     }
-    sleep(10);
+    if(res.json().errors){
+        console.log("Error in server side happend.");
+    }
+    sleep(1);
 }
 
 export function handleSummary(data) {
