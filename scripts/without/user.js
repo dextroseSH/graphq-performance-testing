@@ -13,7 +13,7 @@ let headers = {
 
 export let options = {
 
-    vus: 1000,
+    vus: 500,
     duration: '30s',
 
 };
